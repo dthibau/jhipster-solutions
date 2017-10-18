@@ -42,6 +42,9 @@ public class CacheConfiguration {
             cm.createCache(org.dthibau.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(org.dthibau.domain.User.class.getName() + ".authorities", jcacheConfiguration);
             cm.createCache(org.dthibau.domain.Topic.class.getName(), jcacheConfiguration);
+            cm.createCache(org.dthibau.domain.Message.class.getName(), jcacheConfiguration);
+            cm.createCache(org.dthibau.domain.Message.class.getName() + ".responses", jcacheConfiguration);
+            cm.createCache(org.dthibau.domain.Topic.class.getName() + ".topics", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
