@@ -16,7 +16,6 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="subject"><span jhiTranslate="forumApp.message.subject">Subject</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="content"><span jhiTranslate="forumApp.message.content">Content</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="postDate"><span jhiTranslate="forumApp.message.postDate">Post Date</span> <span class="fa fa-sort"></span></th>
@@ -28,8 +27,7 @@
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let message of messages ;trackBy: trackId">
-                <td><a [routerLink]="['../message', message.id ]">{{message.id}}</a></td>
-                <td>{{message.subject}}</td>
+                <td><a [routerLink]="['../message', message.id ]">{{message.subject}}</a></td>
                 <td>{{message.content}}</td>
                 <td>{{message.postDate | date:'medium'}}</td>
                 <td>

@@ -4,11 +4,11 @@ Navbar
 ========================================================================== */
 .navbar-version {
     font-size: 10px;
-    color: #ccc
+    color: #e7302a
 }
 
 .jh-navbar {
-    background-color: #353d47;
+    background-color: #ffffff;
     padding: .2em 1em;
     .profile-image {
         margin: -10px 0px;
@@ -17,7 +17,7 @@ Navbar
         border-radius: 50%;
     }
     .dropdown-item.active, .dropdown-item.active:focus, .dropdown-item.active:hover {
-        background-color: #353d47;
+        background-color: #e7302a;
     }
     .dropdown-toggle::after {
         margin-left: 0.15em;
@@ -30,13 +30,14 @@ Navbar
     }
     a.nav-link {
         font-weight: 400;
+	color: #e7302a;
     }
     .jh-navbar-toggler {
-        color: #ccc;
+        color: #e7302a;
         font-size: 1.5em;
         padding: 10px;
         &:hover {
-            color: #fff;
+            color: #ff0000;
         }
     }
 }

@@ -16,7 +16,6 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="title"><span jhiTranslate="forumApp.topic.title">Title</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="description"><span jhiTranslate="forumApp.topic.description">Description</span> <span class="fa fa-sort"></span></th>
             <th></th>
@@ -24,8 +23,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let topic of topics ;trackBy: trackId">
-                <td><a [routerLink]="['../topic', topic.id ]">{{topic.id}}</a></td>
-                <td>{{topic.title}}</td>
+                <td><a [routerLink]="['../topic', topic.id ]">{{topic.title}}</a></td>
                 <td>{{topic.description}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
