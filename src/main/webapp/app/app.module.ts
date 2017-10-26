@@ -5,6 +5,7 @@ import { Ng2Webstorage } from 'ng2-webstorage';
 
 import { ForumSharedModule, UserRouteAccessService } from './shared';
 import { ForumHomeModule } from './home/home.module';
+import { ForumAboutModule } from './about/about.module';
 import { ForumAdminModule } from './admin/admin.module';
 import { ForumAccountModule } from './account/account.module';
 import { ForumEntityModule } from './entities/entity.module';
@@ -32,6 +33,7 @@ import {
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
         ForumSharedModule,
         ForumHomeModule,
+        ForumAboutModule,
         ForumAdminModule,
         ForumAccountModule,
         ForumEntityModule,
