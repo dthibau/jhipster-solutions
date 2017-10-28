@@ -15,5 +15,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query("select message from Message message where message.auteur.login = ?#{principal.username}")
     List<Message> findByAuteurIsCurrentUser();
+    
+    @Query("select m from Message m left join fetch m.responses where m = ?1")
+    Message loadFull(Message m);
 
 }
