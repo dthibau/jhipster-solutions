@@ -1,28 +1,40 @@
 package org.dthibau.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import org.dthibau.domain.Message;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
+import javax.validation.Valid;
+
+import org.dthibau.domain.Message;
 import org.dthibau.repository.MessageRepository;
+import org.dthibau.service.FluxService;
+import org.dthibau.service.dto.MessageDTO;
+import org.dthibau.service.mapper.MessageMapper;
 import org.dthibau.web.rest.util.HeaderUtil;
 import org.dthibau.web.rest.util.PaginationUtil;
-import io.swagger.annotations.ApiParam;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.codahale.metrics.annotation.Timed;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiParam;
 
 /**
  * REST controller for managing Message.
@@ -37,8 +49,14 @@ public class MessageResource {
 
     private final MessageRepository messageRepository;
 
-    public MessageResource(MessageRepository messageRepository) {
+    private final MessageMapper messageMapper;
+
+    private final FluxService fluxService;
+    
+    public MessageResource(MessageRepository messageRepository, MessageMapper messageMapper, FluxService fluxService) {
         this.messageRepository = messageRepository;
+        this.messageMapper = messageMapper;
+        this.fluxService = fluxService;
     }
 
     /**
@@ -125,4 +143,25 @@ public class MessageResource {
         messageRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+    
+    /**
+     * GET  /messages : get all the messages.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of messages in body
+     */
+    @GetMapping("/flux")
+    @Timed
+    public ResponseEntity<List<MessageDTO>> getAllFlux(@ApiParam Pageable pageable) {
+        log.debug("REST request to get a page of Messages");
+        Page<Message> page = messageRepository.findAll(pageable);
+        
+        List<Message> messages = fluxService.loadFlux(page.getContent());
+        List<MessageDTO> messagesDTO = messageMapper.messagesToMessageDTOs(messages);
+        
+        
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/flux");
+        return new ResponseEntity<>(messagesDTO, headers, HttpStatus.OK);
+    }
+
 }

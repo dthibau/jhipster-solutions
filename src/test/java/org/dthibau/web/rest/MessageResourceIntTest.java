@@ -4,6 +4,8 @@ import org.dthibau.ForumApp;
 
 import org.dthibau.domain.Message;
 import org.dthibau.repository.MessageRepository;
+import org.dthibau.service.FluxService;
+import org.dthibau.service.mapper.MessageMapper;
 import org.dthibau.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -55,6 +57,12 @@ public class MessageResourceIntTest {
     private MessageRepository messageRepository;
 
     @Autowired
+    private MessageMapper messageMapper;
+
+    @Autowired
+    private FluxService fluxService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,7 +81,7 @@ public class MessageResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MessageResource messageResource = new MessageResource(messageRepository);
+        final MessageResource messageResource = new MessageResource(messageRepository,messageMapper, fluxService );
         this.restMessageMockMvc = MockMvcBuilders.standaloneSetup(messageResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

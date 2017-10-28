@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import org.dthibau.domain.Message;
 import org.dthibau.service.dto.MessageDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,6 +35,13 @@ public class MessageMapper {
             .filter(Objects::nonNull)
             .map(this::messageToMessageDTO)
             .collect(Collectors.toList());
+    }
+
+    public Page<MessageDTO> messagesToMessageDTOs(Page<Message> messages) {
+        List<MessageDTO> messagesDTO = messagesToMessageDTOs(messages.getContent());
+        
+        return new PageImpl<MessageDTO>(messagesDTO);
+        
     }
 
     public Message messageFromId(Long id) {
