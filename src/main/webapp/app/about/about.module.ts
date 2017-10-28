@@ -5,9 +5,12 @@ import { ForumSharedModule } from '../shared';
 
 import { AboutComponent, ABOUT_ROUTE } from './';
 
+import {EditorModule} from 'primeng/primeng';
+
 @NgModule({
   imports: [
   ForumSharedModule,
+  EditorModule,
   RouterModule.forRoot([ ABOUT_ROUTE ], { useHash: true })
   ],
   declarations: [

@@ -10,6 +10,9 @@ import { Topic } from './topic.model';
 import { TopicPopupService } from './topic-popup.service';
 import { TopicService } from './topic.service';
 
+import {EditorModule} from 'primeng/primeng';
+import {InputTextModule} from 'primeng/primeng';
+
 @Component({
     selector: 'jhi-topic-dialog',
     templateUrl: './topic-dialog.component.html'
