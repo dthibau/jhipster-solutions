@@ -184,6 +184,36 @@ public class MessageResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllFlux() throws Exception {
+        
+    	// Initialize the database
+        messageRepository.saveAndFlush(message);
+        Message response = new Message()
+                .subject(DEFAULT_SUBJECT)
+                .content(DEFAULT_CONTENT)
+                .postDate(DEFAULT_POST_DATE);
+        messageRepository.saveAndFlush(response);
+        this.message.addResponses(response);
+        messageRepository.saveAndFlush(message);
+        
+    	
+
+        // Get all the messageList
+        restMessageMockMvc.perform(get("/api/flux?sort=id,asc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(message.getId().intValue())))
+            .andExpect(jsonPath("$.[*].subject").value(hasItem(DEFAULT_SUBJECT.toString())))
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
+            .andExpect(jsonPath("$.[*].postDate").value(hasItem(sameInstant(DEFAULT_POST_DATE))))
+            .andExpect(jsonPath("$.[0]").isMap())
+            .andExpect(jsonPath("$.[0].responses").isArray())
+            .andExpect(jsonPath("$.[0].responses[0]").isMap());
+    }
+
+
+    @Test
+    @Transactional
     public void getMessage() throws Exception {
         // Initialize the database
         messageRepository.saveAndFlush(message);
