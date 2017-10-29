@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.dthibau.domain.Topic;
 
 import org.dthibau.repository.TopicRepository;
+import org.dthibau.web.rest.errors.BadRequestAlertException;
 import org.dthibau.web.rest.util.HeaderUtil;
 import org.dthibau.web.rest.util.PaginationUtil;
 import io.swagger.annotations.ApiParam;
@@ -53,7 +54,7 @@ public class TopicResource {
     public ResponseEntity<Topic> createTopic(@Valid @RequestBody Topic topic) throws URISyntaxException {
         log.debug("REST request to save Topic : {}", topic);
         if (topic.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new topic cannot already have an ID")).body(null);
+            throw new BadRequestAlertException("A new topic cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Topic result = topicRepository.save(topic);
         return ResponseEntity.created(new URI("/api/topics/" + result.getId()))
