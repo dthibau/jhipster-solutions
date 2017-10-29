@@ -1,6 +1,6 @@
 package org.dthibau.web.rest;
-import org.dthibau.config.Constants;
 
+import org.dthibau.config.Constants;
 import org.dthibau.ForumApp;
 import org.dthibau.domain.Authority;
 import org.dthibau.domain.User;
@@ -8,11 +8,13 @@ import org.dthibau.repository.AuthorityRepository;
 import org.dthibau.repository.UserRepository;
 import org.dthibau.security.AuthoritiesConstants;
 import org.dthibau.service.MailService;
-import org.dthibau.service.UserService;
 import org.dthibau.service.dto.UserDTO;
+import org.dthibau.web.rest.errors.ExceptionTranslator;
 import org.dthibau.web.rest.vm.KeyAndPasswordVM;
 import org.dthibau.web.rest.vm.ManagedUserVM;
+import org.dthibau.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,9 +30,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.time.LocalDate;
+
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,9 +40,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -67,31 +67,35 @@ public class AccountResourceIntTest {
     @Autowired
     private HttpMessageConverter[] httpMessageConverters;
 
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
     @Mock
     private UserService mockUserService;
 
     @Mock
     private MailService mockMailService;
 
-    private MockMvc restUserMockMvc;
-
     private MockMvc restMvc;
+
+    private MockMvc restUserMockMvc;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(anyObject());
-
         AccountResource accountResource =
             new AccountResource(userRepository, userService, mockMailService);
 
         AccountResource accountUserMockResource =
             new AccountResource(userRepository, mockUserService, mockMailService);
-
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
+            .setControllerAdvice(exceptionTranslator)
             .build();
-        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource).build();
+        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
+            .setControllerAdvice(exceptionTranslator)
+            .build();
     }
 
     @Test

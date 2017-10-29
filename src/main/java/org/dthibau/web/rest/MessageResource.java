@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.dthibau.domain.Message;
 
 import org.dthibau.repository.MessageRepository;
+import org.dthibau.web.rest.errors.BadRequestAlertException;
 import org.dthibau.web.rest.util.HeaderUtil;
 import org.dthibau.web.rest.util.PaginationUtil;
 import io.swagger.annotations.ApiParam;
@@ -53,7 +54,7 @@ public class MessageResource {
     public ResponseEntity<Message> createMessage(@Valid @RequestBody Message message) throws URISyntaxException {
         log.debug("REST request to save Message : {}", message);
         if (message.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new message cannot already have an ID")).body(null);
+            throw new BadRequestAlertException("A new message cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Message result = messageRepository.save(message);
         return ResponseEntity.created(new URI("/api/messages/" + result.getId()))
