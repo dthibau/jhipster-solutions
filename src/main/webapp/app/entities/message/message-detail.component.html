@@ -1,0 +1,49 @@
+
+<div *ngIf="message">
+    <h2><span jhiTranslate="forumApp.message.detail.title">Message</span> {{message.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="forumApp.message.subject">Subject</span></dt>
+        <dd>
+            <span>{{message.subject}}</span>
+        </dd>
+        <dt><span jhiTranslate="forumApp.message.content">Content</span></dt>
+        <dd>
+            <span>{{message.content}}</span>
+        </dd>
+        <dt><span jhiTranslate="forumApp.message.postDate">Post Date</span></dt>
+        <dd>
+            <span>{{message.postDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="forumApp.message.auteur">Auteur</span></dt>
+        <dd>
+            {{message.auteur?.login}}
+        </dd>
+        <dt><span jhiTranslate="forumApp.message.topic">Topic</span></dt>
+        <dd>
+            <div *ngIf="message.topic">
+                <a [routerLink]="['/topic', message.topic?.id]">{{message.topic?.title}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="forumApp.message.message">Message</span></dt>
+        <dd>
+            <div *ngIf="message.message">
+                <a [routerLink]="['/message', message.message?.id]">{{message.message?.subject}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'message/'+ message.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

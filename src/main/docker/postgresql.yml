@@ -1,0 +1,11 @@
+version: '2'
+services:
+    forum-postgresql:
+        image: postgres:9.6.5
+        # volumes:
+        #     - ~/volumes/jhipster/forum/postgresql/:/var/lib/postgresql/data/
+        environment:
+            - POSTGRES_USER=forum
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432

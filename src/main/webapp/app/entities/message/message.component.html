@@ -1,0 +1,76 @@
+<div>
+    <h2>
+        <span jhiTranslate="forumApp.message.home.title">Messages</span>
+        <button class="btn btn-primary float-right jh-create-entity create-message" [routerLink]="['/', { outlets: { popup: ['message-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  jhiTranslate="forumApp.message.home.createLabel">
+            Create new Message
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="messages">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="subject"><span jhiTranslate="forumApp.message.subject">Subject</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="content"><span jhiTranslate="forumApp.message.content">Content</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="postDate"><span jhiTranslate="forumApp.message.postDate">Post Date</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="auteur.login"><span jhiTranslate="forumApp.message.auteur">Auteur</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="topic.title"><span jhiTranslate="forumApp.message.topic">Topic</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="message.subject"><span jhiTranslate="forumApp.message.message">Message</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <tr *ngFor="let message of messages ;trackBy: trackId">
+                <td><a [routerLink]="['../message', message.id ]">{{message.id}}</a></td>
+                <td>{{message.subject}}</td>
+                <td>{{message.content}}</td>
+                <td>{{message.postDate | date:'medium'}}</td>
+                <td>
+                    {{message.auteur?.login}}
+                </td>
+                <td>
+                    <div *ngIf="message.topic">
+                        <a [routerLink]="['../topic', message.topic?.id ]" >{{message.topic?.title}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="message.message">
+                        <a [routerLink]="['../message', message.message?.id ]" >{{message.message?.subject}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../message', message.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'message/'+ message.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'message/'+ message.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
