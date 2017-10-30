@@ -13,6 +13,7 @@ export class MessageService {
 
     private resourceUrl = SERVER_API_URL + 'api/messages';
     private fluxUrl = SERVER_API_URL + 'api/flux';
+    private fluxTreeUrl = SERVER_API_URL + 'api/flux-tree';
 
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
 
@@ -48,6 +49,12 @@ export class MessageService {
     getFlux(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
         return this.http.get(this.fluxUrl, options)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
+    getFluxTree(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(this.fluxTreeUrl, options)
             .map((res: Response) => this.convertResponse(res));
     }
 

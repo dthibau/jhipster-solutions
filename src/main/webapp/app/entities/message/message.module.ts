@@ -15,6 +15,7 @@ import {
     messageRoute,
     messagePopupRoute,
 } from './';
+import { FluxComponent } from './flux/flux.component';
 
 const ENTITY_STATES = [
     ...messageRoute,
@@ -34,6 +35,7 @@ const ENTITY_STATES = [
         MessageDeleteDialogComponent,
         MessagePopupComponent,
         MessageDeletePopupComponent,
+        FluxComponent,
     ],
     entryComponents: [
         MessageComponent,

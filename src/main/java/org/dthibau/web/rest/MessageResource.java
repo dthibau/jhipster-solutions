@@ -12,7 +12,9 @@ import org.dthibau.repository.MessageRepository;
 import org.dthibau.service.FluxService;
 import org.dthibau.web.rest.errors.BadRequestAlertException;
 import org.dthibau.service.dto.MessageDTO;
+import org.dthibau.service.dto.NodeDTO;
 import org.dthibau.service.mapper.MessageMapper;
+import org.dthibau.service.mapper.NodeMapper;
 import org.dthibau.web.rest.util.HeaderUtil;
 import org.dthibau.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -51,12 +53,15 @@ public class MessageResource {
     private final MessageRepository messageRepository;
 
     private final MessageMapper messageMapper;
+    
+    private final NodeMapper nodeMapper;
 
     private final FluxService fluxService;
     
-    public MessageResource(MessageRepository messageRepository, MessageMapper messageMapper, FluxService fluxService) {
+    public MessageResource(MessageRepository messageRepository, MessageMapper messageMapper, NodeMapper nodeMapper, FluxService fluxService) {
         this.messageRepository = messageRepository;
         this.messageMapper = messageMapper;
+        this.nodeMapper = nodeMapper;
         this.fluxService = fluxService;
     }
 
@@ -162,6 +167,26 @@ public class MessageResource {
         
         
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/flux");
+        return new ResponseEntity<>(messagesDTO, headers, HttpStatus.OK);
+    }
+    
+    /**
+     * GET  /messages : get all the messages.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of messages in body
+     */
+    @GetMapping("/flux-tree")
+    @Timed
+    public ResponseEntity<List<NodeDTO>> getAllFluxAsNodes(@ApiParam Pageable pageable) {
+        log.debug("REST request to get a page of Messages");
+        Page<Message> page = messageRepository.findAll(pageable);
+        
+        List<Message> messages = fluxService.loadFlux(page.getContent());
+        List<NodeDTO> messagesDTO = nodeMapper.messagesToNodeDTOs(messages);
+        
+        
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/flux-tree");
         return new ResponseEntity<>(messagesDTO, headers, HttpStatus.OK);
     }
 

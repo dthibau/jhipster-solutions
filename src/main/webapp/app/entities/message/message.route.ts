@@ -5,6 +5,7 @@ import { UserRouteAccessService } from '../../shared';
 import { JhiPaginationUtil } from 'ng-jhipster';
 
 import { MessageComponent } from './message.component';
+import { FluxComponent } from './flux/flux.component';
 import { MessageDetailComponent } from './message-detail.component';
 import { MessagePopupComponent } from './message-dialog.component';
 import { MessageDeletePopupComponent } from './message-delete-dialog.component';
@@ -12,7 +13,7 @@ import { MessageDeletePopupComponent } from './message-delete-dialog.component';
 export const messageRoute: Routes = [
     {
         path: 'message',
-        component: MessageComponent,
+        component: FluxComponent,
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'forumApp.message.home.title'
