@@ -42,7 +42,7 @@ export class MessageComponent implements OnInit, OnDestroy {
     }
 
     loadAll() {
-        this.messageService.query({
+        this.messageService.getFlux({
             page: this.page,
             size: this.itemsPerPage,
             sort: this.sort()

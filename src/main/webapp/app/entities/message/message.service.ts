@@ -12,6 +12,7 @@ import { ResponseWrapper, createRequestOption } from '../../shared';
 export class MessageService {
 
     private resourceUrl = SERVER_API_URL + 'api/messages';
+    private fluxUrl = SERVER_API_URL + 'api/flux';
 
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
 
@@ -41,6 +42,12 @@ export class MessageService {
     query(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
         return this.http.get(this.resourceUrl, options)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
+    getFlux(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(this.fluxUrl, options)
             .map((res: Response) => this.convertResponse(res));
     }
 
